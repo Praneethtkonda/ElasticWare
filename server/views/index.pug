@@ -1,6 +1,7 @@
 doctype html
 html
   head
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link#bootstrap-css(href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css', rel='stylesheet')
     link(rel='stylesheet', href='/css/main.css')
     script(type='text/javascript' src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js')
@@ -21,7 +22,7 @@ html
               input#filename.form-control(type='text', placeholder='Search...', required='')
               span.input-group-btn
                 button#send-message.btn.btn-success Search
-                    
-    .wrap
-      .container-fluid
-        #messages
+            br                 
+            .wrap
+              .container-fluid
+                #messages.alert.alert-primary(role='alert')
