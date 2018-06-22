@@ -1,0 +1,27 @@
+doctype html
+html
+  head
+    link#bootstrap-css(href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css', rel='stylesheet')
+    link(rel='stylesheet', href='/css/main.css')
+    script(type='text/javascript' src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js')
+    script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js')
+    script(src='//code.jquery.com/jquery-1.11.1.min.js')
+    script(type='text/javascript' src='/socket.io/socket.io.js')
+    script(type='text/javascript' src='/js/main.js')
+  body
+    .container(style='margin-top: 8%;')
+      .col-md-6.col-md-offset-3
+        .row
+          #logo.text-center
+            h1 ElasticWare
+            p Goodware Finder
+          
+            
+            .input-group
+              input#filename.form-control(type='text', placeholder='Search...', required='')
+              span.input-group-btn
+                button#send-message.btn.btn-success Search
+                    
+    .wrap
+      .container-fluid
+        #messages

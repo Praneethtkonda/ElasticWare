@@ -1,0 +1,2 @@
+# ElasticWare
+Python + node
