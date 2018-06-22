@@ -1,7 +1,9 @@
 from socketIO_client import SocketIO
 def message_response(data):
     print(data)
+#Write the addition code from here
 
+#To here
 socketIO = SocketIO('localhost', 3000)
 mess = 'Hi praneeth'
 # Listen
