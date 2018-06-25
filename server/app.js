@@ -17,6 +17,7 @@ app.use('/', routes);
 
 io.on('connection', function(socket){
   console.log('a user connected');
+  console.log(io.engine.clientsCount);
   socket.on('message', function(msg){
   	socket.broadcast.emit('message',msg)
     console.log('message: ' + msg);
