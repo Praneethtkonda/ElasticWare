@@ -18,7 +18,7 @@ class ESController(object):
         elif type=='proc':
             pass
         item = SearchItem(id=id, name=name, type=type,
-                          ingestion_date=datetime.datetime.today(), md5=None)
+                          ingestion_date=datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S'), md5=None)
         return self.es_client.index(index=self.config['DEFAULT']['index'], doc_type=self.config['DEFAULT']['type'], id=item.id, body=vars(item))
 
     #TODO: Note that 'name' param here for files refers to the whole path (The full qualified file name)
