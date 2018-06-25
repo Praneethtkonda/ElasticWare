@@ -32,6 +32,9 @@ class ESController(object):
 
 
     def getItem(self, name):
-        res = self.es_client.search(index=self.config['DEFAULT']['index'], body = {'query':{'match':{'name':"'"+name+"'"}}})['hits']['total']
-        return res
+        res = self.es_client.search(index=self.config['DEFAULT']['index'], body = {'query':{'term':{'name':name}}})
+        return res['hits']['total']
 
+    def fuzzyGetItem(self, regex):
+        res = self.es_client.search(index=self.config['DEFAULT']['index'], body = {'query':{'regexp':{'name': regex}}})['hits']['total']
+        return res

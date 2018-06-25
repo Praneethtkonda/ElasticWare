@@ -9,5 +9,7 @@ es_handle = ESController()
 #     print('FOUND!!!')
 
 print es_handle.insertItem('C:/swapfile.sys', 'file')
-print es_handle.getItem('swapfile.sys')
-print es_handle.purgeItem('C:/swapfile.sys', 'file')
+# print es_handle.getItem('swapfile.sys')
+# print es_handle.purgeItem('C:/swapfile.sys', 'file')
+
+print es_handle.fuzzyGetItem('swapfile.sys')
