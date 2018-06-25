@@ -1,0 +1,32 @@
+{
+    "search_items": {
+        "dynamic_date_formats": [
+            "yyyy-MM-dd",
+            "dd-MM-yyyy",
+            "date_optional_time",
+            "yyyy-MM-dd HH:mm:ss"
+        ],
+        "properties": {
+            "id": {
+                "type": "text",
+                "analyzer": "simple"
+            },
+            "ingestion_date": {
+                "type": "date",
+                "format": "yyyy-MM-dd HH:mm:ss"
+            },
+            "name": {
+                "type": "text",
+                "fielddata": true,
+                "analyser": "simple"
+            },
+            "type":{
+                "type": "text"
+            },
+            "md5":{
+                 "type": "text",
+                "index": "not_analyzed"
+            }  
+        }
+    }
+}

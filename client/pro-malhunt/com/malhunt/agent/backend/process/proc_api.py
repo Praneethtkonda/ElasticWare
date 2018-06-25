@@ -3,6 +3,7 @@ import wmi
 import os
 import time
 import pythoncom
+from com.malhunt.agent.backend.db.ElasticsearchController import ESController
 
 # TODO: Remove on elastic search
 import re
@@ -10,6 +11,8 @@ import re
 
 class proc_api:
 	file_name = 'process_db.txt'
+	es_handle = ESController()
+
 	def __init__(self):
 		self.wmi_obj = wmi.WMI()
 		with open(self.file_name, 'w+') as fw:
@@ -23,10 +26,8 @@ class proc_api:
 		proc_name: process name of process to be added
 		'''
 		
-		# TODO Change to elastic search
-		with open(self.file_name, 'a+') as fw:
-			fw.write('{} {}'.format(pid, proc_name))
-			fw.write(os.linesep)
+		# TODO: Unit-testing and Logging
+		self.es_handle.insertItem(name=proc_name, type='proc', id=pid)
 	
 	def rem_process(self, pid, proc_name):
 		'''
@@ -36,26 +37,25 @@ class proc_api:
 		proc_name: process name of process to be removed
 		'''
 		
-		# TODO Change to elastic search
-		with open(self.file_name, 'a+') as fw:
-			fw.write('-{} {}'.format(pid, proc_name))
-			fw.write(os.linesep)
+		# TODO: Unit-testing and Logging
+		self.es_handle.purgeItem(name=proc_name, type='proc', id=pid)
 	
-	def check_process(process_name):
+	def check_process(self, process_name):
 		'''
 		Queries in a database and checks if process name exists
 		
 		'''
 		
-		# TODO Change to elastic search
-		try:
-			with open(self.file_name, 'r+') as fw:
-				all_proc = fw.read()
-				proc = re.finditer(r".*{}$".format(process_name), all_proc, flags = re.MULTILINE)
-				proc_name = next(proc)
-				return True
-		except StopIteration:
-			return False
+		# try:
+		# 	with open(self.file_name, 'r+') as fw:
+		# 		all_proc = fw.read()
+		# 		proc = re.finditer(r".*{}$".format(process_name), all_proc, flags = re.MULTILINE)
+		# 		proc_name = next(proc)
+		# 		return True
+		# except StopIteration:
+		# 	return False
+		# TODO Support RE
+		return self.es_handle.getItem(name=process_name)>0
 	
 	def fill_process(self):
 		'''
