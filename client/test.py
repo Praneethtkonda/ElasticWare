@@ -8,7 +8,7 @@ def message_response(data):
 
 
 #To here
-socketIO = SocketIO('10.33.34.19', 3000)
+socketIO = SocketIO('localhost', 3000)
 mess = 'Example Message'
 # Listen
 
