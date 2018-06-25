@@ -1,3 +1,4 @@
 socketIO-client
 configparser
 elasticsearch
+pywin32
