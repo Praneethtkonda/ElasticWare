@@ -4,6 +4,7 @@ import unicodedata
 import json
 import socket
 from process import proc_api
+from file import file_api
 from threading import Thread
 import callback_all
 
@@ -16,7 +17,7 @@ def find_in_system(message):
         message = unicodedata.normalize('NFKD', message.strip()).encode('ascii', 'ignore')
         message_json = json.loads(message)
         search_formats = {
-            'file': query_registry.search_registry,
+            'file': file_api.FileEventsHandler().check_files,
             'reg': None,
             'proc': proc_api.proc_api().check_process,
             'md5': None}

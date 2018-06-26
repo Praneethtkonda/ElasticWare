@@ -1,18 +1,27 @@
 import os
 import fnmatch
 import FileSystemWatcher
-import time
 import sys
 import time
-import logging
+import configparser
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
+from com.malhunt.agent.backend.db.ElasticsearchController import ESController
 
 
-class FileHandler(PatternMatchingEventHandler):
-    patterns = ["*.*"]
+class FileEventsHandler(PatternMatchingEventHandler):
+    es_handle = ESController()
 
-    def process(self, event):
+    def on_moved(self, event):
+        self.process_event(event)
+
+    def on_deleted(self, event):
+        self.process_event(event)
+
+    def on_created(self, event):
+        self.process_event(event)
+
+    def process_event(self, event):
         """
         event.event_type
             'modified' | 'created' | 'moved' | 'deleted'
@@ -22,19 +31,29 @@ class FileHandler(PatternMatchingEventHandler):
             path/to/observed/file
         """
         # the file will be processed there
-        if event.event_type == 'moved':
-            print event.src_path + " renamed/moved to " + event.dest_path, event.event_type  # print now only for degug
-        else:
-            print event.src_path, event.event_type
+        if event.event_type == 'created':
+            self.add_file(filepath=event.src_path)
+        elif event.event_type == 'deleted':
+            self.remove_file(filepath=event.src_path)
+        elif event.event_type == 'moved':
+            self.remove_file(filepath=event.src_path)
+            self.add_file(filepath=event.dest_path)
 
-    def on_moved(self, event):
-        self.process(event)
+    def add_file(self, filepath):
+        ''' Insert file record into ES '''
+        self.es_handle.insertItem(name=filepath, type='file')
 
-    def on_deleted(self, event):
-        self.process(event)
+    def remove_file(self, filepath):
+        ''' Remove file record from ES '''
+        self.es_handle.purgeItem(name=filepath, type='file')
 
-    def on_created(self, event):
-        self.process(event)
+    def get_files(self, name_regex):
+        ''' Get file records from ES whose names match the specified regex '''
+        return self.es_handle.fuzzyGetItem(name_regex)
+
+    def check_files(self, name_regex):
+        ''' Check if file records in ES whose names match the specified regex '''
+        return self.es_handle.fuzzyCheckItem(name_regex)
 
 
 class Filelist:
@@ -48,32 +67,28 @@ class Filelist:
                 fp.write(files + "\n")
 
 
-class UpdatedFilelist:
+class FileUpdater:
     """ Monitors hardisks for addition, deletion and rename of files """
 
-    def filenames(self, path_list):
-
+    def setObserver(self, path_list):
         observer = Observer()
         thread = []
         for path in path_list:
-            observer.schedule(FileHandler(), path, recursive=True)
+            observer.schedule(FileEventsHandler(), path, recursive=True)
             thread.append(observer)
-
         observer.start()
         try:
             while True:
                 time.sleep(1)
         except KeyboardInterrupt:
             observer.stop()
-
         observer.join()
 
 
 if __name__ == '__main__':
-    path = "C://"
-    path2 = "C://Users/qauser/Documents/a"  # ive given this only to test because changing it to C:// will output a lot of changes
-    path3 = "C://Users/qauser/Documents/b"
-    #obj1 = Filelist()
-    obj2 = UpdatedFilelist()
-    print " initiating "
-    obj2.filenames([path2, path3])
+    config = configparser.ConfigParser()
+    config.readfp(open(os.path.dirname(__file__) + '/../config/mhprop.ini'))
+    paths = (config['DEFAULT']['file_watch_directories']).split(',')
+    file_updater = FileUpdater()
+    print "Initiating..."
+    file_updater.setObserver(paths)
