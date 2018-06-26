@@ -23,7 +23,7 @@ def find_in_system(message):
         #isReg = 'Yes' if search_formats[message_json['request_type']](message_json['name']) else 'No'
         #socketIO.emit('message', json.dumps({'result':isReg, 'hostname':socket.gethostname(), 'name':message_json['name']}))
         response = search_formats[message_json['request_type']](message_json['name'])
-        socketIO.emit('message', json.dump({'hostname':socket.gethostname(), 'response':response}))
+        socketIO.emit('message', json.dumps({'hostname':socket.gethostname(), 'response':response}))
 
 def main():
 	# update_obj = Thread(callback_all.init)

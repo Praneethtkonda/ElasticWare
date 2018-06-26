@@ -4,6 +4,7 @@ from ElasticsearchClientCreator import ElasticsearchclientCreator
 from com.malhunt.agent.backend.model.SearchItem import SearchItem
 import configparser
 import json
+import sys
 
 class ESController(object):
 
@@ -33,25 +34,25 @@ class ESController(object):
 
 
     def checkItem(self, name):
-        res = self.es_client.search(index=self.config['DEFAULT']['index'], body = {'query':{'term':{'name':name}}})
+        res = self.es_client.search(index=self.config['DEFAULT']['index'], body = {'query':{'term':{'name':name}}}, size=self.config['DEFAULT']['es_limit'], from_=0)
         return res['hits']['total']
 
     def fuzzyCheckItem(self, regex):
-        res = self.es_client.search(index=self.config['DEFAULT']['index'], body = {"query": {"query_string":{"allow_leading_wildcard":True,"default_field": "name","query": regex}}})['hits']['total']
+        res = self.es_client.search(index=self.config['DEFAULT']['index'], body = {"query": {"query_string":{"allow_leading_wildcard":True,"default_field": "name","query": regex}}}, size=self.config['DEFAULT']['es_limit'], from_=0)['hits']['total']
         return res['hits']['total']
 
     def getItem(self, name):
-        res = self.es_client.search(index=self.config['DEFAULT']['index'], body={'query': {'term': {'name': name}}})
+        res = self.es_client.search(index=self.config['DEFAULT']['index'], body={'query': {'term': {'name': name}}}, size=self.config['DEFAULT']['es_limit'], from_=0)
         return self.getHitsListFromESResult(res)
 
     def fuzzyGetItem(self, regex):
         res = self.es_client.search(index=self.config['DEFAULT']['index'], body={
-            "query": {"query_string": {"allow_leading_wildcard": True, "default_field": "name", "query": regex}}})
+            "query": {"query_string": { "allow_leading_wildcard": True, "default_field": "name", "query": regex}}}, size=self.config['DEFAULT']['es_limit'], from_=0)
         return self.getHitsListFromESResult(res)
 
     def getHitsListFromESResult(self, res):
         hits = []
         for hit in res['hits']['hits']:
-            hits.append({'name': hit['_source']['name'], 'path': hit['_source']['id']})
+            hits.append({'name': hit['_source']['name'], 'id': hit['_source']['id']})
         return hits
 

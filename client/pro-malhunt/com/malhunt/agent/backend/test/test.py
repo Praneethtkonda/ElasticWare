@@ -18,4 +18,4 @@ es_handle = ESController()
 
 # obj = es_handle.getItem('swapfile.sys')
 # print 'Name: {}, Type: {}'.format(obj['name'], obj['type'])
-print es_handle.fuzzyGetItem('*.sys')
+print es_handle.fuzzyGetItem("*")
