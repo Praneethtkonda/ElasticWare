@@ -79,6 +79,18 @@ class proc_api:
 			new_proc = proc_watcher()
 			self.rem_process(new_proc.ProcessId, new_proc.Name)
 
+	def add_proc_callbacks(self):
+		'''
+		Creates separate threads to monitor creations and deletions of processes
+		'''
+		
+		proc_creat_th = Thread(target = self.creat_proc_callback)
+		proc_delet_th = Thread(target = self.delet_proc_callback)
+		proc_creat_th.start()
+		proc_delet_th.start()
+		proc_creat_th.join()
+		proc_delet_th.join()
+	
 	def proc_api(self):
 		'''
 		Starts up the entire process filling and updating task
@@ -86,13 +98,6 @@ class proc_api:
 		'''
 	
 		self.fill_process()
-		proc_creat_th = Thread(target = self.creat_proc_callback)
-		proc_delet_th = Thread(target = self.delet_proc_callback)
-		proc_creat_th.start()
-		proc_delet_th.start()
-		
-		proc_creat_th.join()
-		proc_delet_th.join()
 
 if __name__ == '__main__':
 	proc_obj = proc_api()
