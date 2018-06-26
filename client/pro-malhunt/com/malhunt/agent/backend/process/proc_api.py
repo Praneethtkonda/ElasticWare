@@ -23,7 +23,7 @@ class proc_api:
 		'''
 		
 		# TODO: Unit-testing and Logging
-		self.es_handle.insertItem(name=proc_name, type='proc', id=pid)
+		print self.es_handle.insertItem(name=proc_name, type='proc', id=pid)
 	
 	def rem_process(self, pid, proc_name):
 		'''
