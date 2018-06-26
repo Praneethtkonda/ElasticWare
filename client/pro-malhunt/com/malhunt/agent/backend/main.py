@@ -4,6 +4,8 @@ import unicodedata
 import json
 import socket
 from process import proc_api
+from threading import Thread
+from callback_all
 
 socketIO = SocketIO('10.33.35.132', 3000)
 
@@ -22,8 +24,11 @@ def find_in_system(message):
         socketIO.emit('message', json.dumps({'result':isReg, 'hostname':socket.gethostname(), 'name':message_json['name']}))
 
 def main():
+	update_obj = Thread(callback_all.init)
+	update_obj.start()
 	socketIO.on('message', find_in_system)
 	socketIO.wait()
+	update_obj.join()
 	
 if __name__ == '__main__':
 	main()
