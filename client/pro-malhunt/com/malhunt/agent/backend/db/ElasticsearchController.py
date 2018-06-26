@@ -53,5 +53,5 @@ class ESController(object):
         hits = []
         for hit in res['hits']['hits']:
             hits.append({'name': hit['_source']['name'], 'path': hit['_source']['id']})
-        return json.dumps(hits)
+        return hits
 

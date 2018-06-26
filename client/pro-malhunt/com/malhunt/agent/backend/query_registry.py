@@ -4,8 +4,7 @@ from com.malhunt.agent.backend.db.ElasticsearchController import ESController
 
 def search_registry(key):
     es_handle = ESController()
-    if es_handle.fuzzyGetItem(key) > 0:
-        return True
+    return es_handle.fuzzyGetItem(key)
 
 if __name__ == '__main__':
 	print(search_registry('Elements'))
