@@ -5,18 +5,14 @@ import time
 import pythoncom
 from com.malhunt.agent.backend.db.ElasticsearchController import ESController
 
-# TODO: Remove on elastic search
-import re
-
-
 class proc_api:
-	file_name = 'process_db.txt'
+	'''
+	proc_api allows agent to access process related operations
+	'''
 	es_handle = ESController()
 
 	def __init__(self):
 		self.wmi_obj = wmi.WMI()
-		with open(self.file_name, 'w+') as fw:
-			fw.truncate()
 	
 	def add_process(self, pid, proc_name):
 		'''
@@ -46,14 +42,6 @@ class proc_api:
 		
 		'''
 		
-		# try:
-		# 	with open(self.file_name, 'r+') as fw:
-		# 		all_proc = fw.read()
-		# 		proc = re.finditer(r".*{}$".format(process_name), all_proc, flags = re.MULTILINE)
-		# 		proc_name = next(proc)
-		# 		return True
-		# except StopIteration:
-		# 	return False
 		# TODO Support RE
 		return self.es_handle.getItem(name=process_name)>0
 	
