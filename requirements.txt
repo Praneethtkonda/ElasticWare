@@ -2,3 +2,4 @@ socketIO-client
 configparser
 elasticsearch
 pywin32
+watchdog
