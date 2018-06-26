@@ -23,7 +23,7 @@ class proc_api:
 		'''
 		
 		# TODO: Unit-testing and Logging
-		print self.es_handle.insertItem(name=proc_name, type='proc', id=pid)
+		print self.es_handle.insertItem(name=proc_name, type='proc', id=str(pid))
 	
 	def rem_process(self, pid, proc_name):
 		'''
@@ -34,7 +34,7 @@ class proc_api:
 		'''
 		
 		# TODO: Unit-testing and Logging
-		self.es_handle.purgeItem(name=proc_name, type='proc', id=pid)
+		self.es_handle.purgeItem(name=proc_name, type='proc', id=str(pid))
 	
 	def check_process(self, process_name):
 		'''
@@ -43,7 +43,7 @@ class proc_api:
 		'''
 		
 		# TODO Support RE
-		return self.es_handle.getItem(name=process_name)>0
+		return self.es_handle.checkItem(name=process_name) > 0
 	
 	def fill_process(self):
 		'''

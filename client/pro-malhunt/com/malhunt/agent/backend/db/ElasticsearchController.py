@@ -3,6 +3,7 @@ import  datetime
 from ElasticsearchClientCreator import ElasticsearchclientCreator
 from com.malhunt.agent.backend.model.SearchItem import SearchItem
 import configparser
+import json
 
 class ESController(object):
 
@@ -31,10 +32,26 @@ class ESController(object):
         return self.es_client.delete(index=self.config['DEFAULT']['index'], doc_type=self.config['DEFAULT']['type'], id=id)
 
 
-    def getItem(self, name):
+    def checkItem(self, name):
         res = self.es_client.search(index=self.config['DEFAULT']['index'], body = {'query':{'term':{'name':name}}})
         return res['hits']['total']
 
-    def fuzzyGetItem(self, regex):
+    def fuzzyCheckItem(self, regex):
         res = self.es_client.search(index=self.config['DEFAULT']['index'], body = {"query": {"query_string":{"allow_leading_wildcard":True,"default_field": "name","query": regex}}})['hits']['total']
-        return res
+        return res['hits']['total']
+
+    def getItem(self, name):
+        res = self.es_client.search(index=self.config['DEFAULT']['index'], body={'query': {'term': {'name': name}}})
+        return self.getHitsListFromESResult(res)
+
+    def fuzzyGetItem(self, regex):
+        res = self.es_client.search(index=self.config['DEFAULT']['index'], body={
+            "query": {"query_string": {"allow_leading_wildcard": True, "default_field": "name", "query": regex}}})
+        return self.getHitsListFromESResult(res)
+
+    def getHitsListFromESResult(self, res):
+        hits = []
+        for hit in res['hits']['hits']:
+            hits.append({'name': hit['_source']['name'], 'path': hit['_source']['id']})
+        return json.dumps(hits)
+
