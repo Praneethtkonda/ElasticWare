@@ -2,7 +2,7 @@ from file.file_api import UpdatedFilelist
 from process.proc_api import proc_api
 from threading import Thread
 
-def init():
+def init(self):
 	proc_upd_th = Thread(self._update_proc)
 	file_upd_th = Thread(self._update_file)
 	reg_upd_th = Thread(self._update_reg)

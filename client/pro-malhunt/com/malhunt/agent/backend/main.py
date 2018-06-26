@@ -5,7 +5,7 @@ import json
 import socket
 from process import proc_api
 from threading import Thread
-from callback_all
+import callback_all
 
 socketIO = SocketIO('10.33.35.132', 3000)
 

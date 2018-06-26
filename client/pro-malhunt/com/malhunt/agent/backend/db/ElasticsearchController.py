@@ -36,5 +36,5 @@ class ESController(object):
         return res['hits']['total']
 
     def fuzzyGetItem(self, regex):
-        res = self.es_client.search(index=self.config['DEFAULT']['index'], body = {'query':{'regexp':{'name': regex}}})['hits']['total']
+        res = self.es_client.search(index=self.config['DEFAULT']['index'], body = {"query": {"query_string":{"allow_leading_wildcard":True,"default_field": "name","query": regex}}})['hits']['total']
         return res
