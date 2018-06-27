@@ -110,5 +110,5 @@ class proc_api:
 
 if __name__ == '__main__':
 	proc_obj = proc_api()
-	# proc_obj.proc_api()'''
-	proc_obj.add_proc_callbacks()
+	proc_obj.proc_api()
+	#proc_obj.add_proc_callbacks()

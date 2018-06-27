@@ -2,12 +2,12 @@
 from com.malhunt.agent.backend.db.ElasticsearchController import ESController
 
 es_handle = ESController()
-'''with open('C:\Users\qauser\Downloads\wfile.txt') as fin:
-    for line in fin:
-        try:
-            print es_handle.insertItem(line.strip(), 'file')
-        except Exception as e:
-            print 'Skipping file:{}, insertion call caused exception:{}'.format(line.strip(),str(e))'''
+# with open('C:\Users\qauser\Downloads\wfile.txt') as fin:
+#     for line in fin:
+#         try:
+#             print es_handle.insertItem(line.strip(), 'file')
+#         except Exception as e:
+#             print 'Skipping file:{}, insertion call caused exception:{}'.format(line.strip(),str(e))
 
 # if es_handle.getItem('hiberfil.sys') >0:
 #      print('FOUND!!!')

@@ -6,7 +6,6 @@ import configparser
 import pythoncom
 import watchdog
 
-#TODO: @rittwik/@ganesh There is no class here. Please check.
 def init():
 	proc_upd_th = Thread(target = _update_proc)
 	file_upd_th = Thread(target = _update_file)
@@ -31,7 +30,7 @@ def _update_proc():
 	Creates a threads for process updates
 	'''
 
-	print("Initiating file update.....")
+	print("Initiating process update.....")
 	pythoncom.CoInitialize()
 	proc_obj = proc_api()
 	proc_obj.add_proc_callbacks()

@@ -35,33 +35,37 @@ class ESController(object):
 
     def checkItem(self, name, type):
         if type == 'md5':
-            body = {'query':{'term':{'md5':name}}}
+            target_field = 'md5'
         else:
-            body = {'query':{'term':{'name':name}}}
+            target_field = 'name'
+        body = {'query': {'term': {target_field: name}}}
         res = self.es_client.search(index=self.config['DEFAULT']['index'], body = body, size=self.config['DEFAULT']['es_limit'], from_=0)
         return res['hits']['total']
 
     def fuzzyCheckItem(self, regex, type):
         if type == 'md5':
-            body = {"query": {"query_string":{"allow_leading_wildcard":True,"default_field": "md5","query": regex}}}
+            target_field = 'md5'
         else:
-            body = {"query": {"query_string":{"allow_leading_wildcard":True,"default_field": "name","query": regex}}}
+            target_field = 'name'
+        body = {"query": {"bool": {"must": [{"term": {"type": type}},{"query_string": {"allow_leading_wildcard": True,"default_field":target_field,"query": regex}}]}}}
         res = self.es_client.search(index=self.config['DEFAULT']['index'], body = body, size=self.config['DEFAULT']['es_limit'], from_=0)['hits']['total']
         return res['hits']['total']
 
     def getItem(self, name, type):
         if type == 'md5':
-            body = {'query': {'term': {'md5': name}}}
+            target_field = 'md5'
         else:
-            body = {'query': {'term': {'name': name}}}
+            target_field = 'name'
+        body = {'query': {'term': {target_field: name}}}
         res = self.es_client.search(index=self.config['DEFAULT']['index'], body=body, size=self.config['DEFAULT']['es_limit'], from_=0)
         return self.getHitsListFromESResult(res)
 
     def fuzzyGetItem(self, regex, type):
         if type == 'md5':
-            body = {"query": {"query_string": { "allow_leading_wildcard": True, "default_field": "md5", "query": regex}}}
+            target_field = 'md5'
         else:
-            body = {"query": {"query_string": { "allow_leading_wildcard": True, "default_field": "name", "query": regex}}}
+            target_field = 'name'
+        body = {"query": {"bool": {"must": [{"term": {"type": type}},{"query_string": {"allow_leading_wildcard": True,"default_field": target_field, "query": regex}}]}}}
         res = self.es_client.search(index=self.config['DEFAULT']['index'], body=body, size=self.config['DEFAULT']['es_limit'], from_=0)
         return self.getHitsListFromESResult(res)
 
