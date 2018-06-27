@@ -1,12 +1,16 @@
 from file.file_api import FileUpdater
 from process.proc_api import proc_api
 from threading import Thread
+import os
+import configparser
+import pythoncom
+import watchdog
 
 #TODO: @rittwik/@ganesh There is no class here. Please check.
-def init(self):
-	proc_upd_th = Thread(self._update_proc)
-	file_upd_th = Thread(self._update_file)
-	reg_upd_th = Thread(self._update_reg)
+def init():
+	proc_upd_th = Thread(target = _update_proc)
+	file_upd_th = Thread(target = _update_file)
+	reg_upd_th = Thread(target = _update_reg)
 	proc_upd_th.start()
 	file_upd_th.start()
 	reg_upd_th.start()
@@ -14,18 +18,25 @@ def init(self):
 	file_upd_th.join()
 	reg_upd_th.join()
 
-def _update_file(self):
-	pass
-	
-def _update_proc(self):
+def _update_file():
+	config = configparser.ConfigParser()
+	config.readfp(open(os.path.dirname(__file__) + '/config/mhprop.ini'))
+	paths = (config['DEFAULT']['file_watch_directories']).split(',')
+	file_updater = FileUpdater()
+	print "Initiating file update....."
+	file_updater.setObserver(paths)
+
+def _update_proc():
 	'''
 	Creates a threads for process updates
 	'''
-	
+
+	print("Initiating file update.....")
+	pythoncom.CoInitialize()
 	proc_obj = proc_api()
 	proc_obj.add_proc_callbacks()
 
-def _update_reg(self):
+def _update_reg():
 	pass
 
 	

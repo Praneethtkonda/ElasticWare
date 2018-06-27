@@ -1,14 +1,14 @@
-import query_registry
 from socketIO_client import SocketIO
 import unicodedata
 import json
 import socket
 from process import proc_api
 from file import file_api
+from md5 import md5_api
 from threading import Thread
 import callback_all
 
-socketIO = SocketIO('10.33.35.132', 3000)
+socketIO = SocketIO('10.33.34.25', 3000)
 
 
 def find_in_system(message):
@@ -17,21 +17,20 @@ def find_in_system(message):
         message = unicodedata.normalize('NFKD', message.strip()).encode('ascii', 'ignore')
         message_json = json.loads(message)
         search_formats = {
-            'file': file_api.FileEventsHandler().check_files,
+            'file': file_api.FileEventsHandler().get_files,
             'reg': None,
-            'proc': proc_api.proc_api().check_process,
-            'md5': None}
-        #isReg = 'Yes' if search_formats[message_json['request_type']](message_json['name']) else 'No'
-        #socketIO.emit('message', json.dumps({'result':isReg, 'hostname':socket.gethostname(), 'name':message_json['name']}))
+            'proc': proc_api.proc_api().get_process,
+            'md5': md5_api.md5_api().get_md5}
+
         response = search_formats[message_json['request_type']](message_json['name'])
-        socketIO.emit('message', json.dumps({'hostname':socket.gethostname(), 'response':response}))
+        socketIO.emit('message', json.dumps({'hostname':socket.gethostname(), 'response':response, 'request':message_json['name']}))
 
 def main():
-	# update_obj = Thread(callback_all.init)
-	# update_obj.start()
+	update_obj = Thread(target = callback_all.init)
+	update_obj.start()
 	socketIO.on('message', find_in_system)
 	socketIO.wait()
-	#update_obj.join()
+	update_obj.join()
 	
 if __name__ == '__main__':
-	main()
+    main()

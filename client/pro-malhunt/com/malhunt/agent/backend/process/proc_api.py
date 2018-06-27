@@ -23,6 +23,7 @@ class proc_api:
 		'''
 		
 		# TODO: Unit-testing and Logging
+		#print 'Adding process: pid- {}, name-'.format(pid,proc_name)
 		print self.es_handle.insertItem(name=proc_name, type='proc', id=str(pid))
 	
 	def rem_process(self, pid, proc_name):
@@ -34,16 +35,23 @@ class proc_api:
 		'''
 		
 		# TODO: Unit-testing and Logging
-		self.es_handle.purgeItem(name=proc_name, type='proc', id=str(pid))
+		try:
+			print self.es_handle.purgeItem(name=proc_name, type='proc', id=str(pid))
+		except Exception:
+			print "Coudn't remove process {}".format(proc_name)
 	
 	def check_process(self, process_name):
 		'''
-		Queries in a database and checks if process name exists
+		Queries ES and checks if process name exists
 		
 		'''
-		
-		# TODO Support RE
-		return self.es_handle.checkItem(name=process_name) > 0
+		return self.es_handle.fuzzyCheckItem(regex=process_name, type='proc')
+
+	def get_process(self, process_name):
+		'''
+        Queries ES and gets the matching processes exists
+        '''
+		return self.es_handle.fuzzyGetItem(regex=process_name, type='proc')
 	
 	def fill_process(self):
 		'''
@@ -64,7 +72,7 @@ class proc_api:
 		proc_watcher = wmi_obj_th.Win32_Process.watch_for("creation")
 		while True:
 			new_proc = proc_watcher()
-			self.add_process(new_proc.ProcessId, new_proc.Name)
+			self.add_process(new_proc.ProcessId, new_proc.Caption)
 
 	def delet_proc_callback(self):
 		'''
@@ -77,7 +85,7 @@ class proc_api:
 		proc_watcher = wmi_obj_th.Win32_Process.watch_for("deletion")
 		while True:
 			new_proc = proc_watcher()
-			self.rem_process(new_proc.ProcessId, new_proc.Name)
+			self.rem_process(new_proc.ProcessId, new_proc.Caption)
 
 	def add_proc_callbacks(self):
 		'''
@@ -101,4 +109,5 @@ class proc_api:
 
 if __name__ == '__main__':
 	proc_obj = proc_api()
-	proc_obj.proc_api()
+	# proc_obj.proc_api()'''
+	proc_obj.add_proc_callbacks()
