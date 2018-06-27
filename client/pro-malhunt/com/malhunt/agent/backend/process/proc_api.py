@@ -106,6 +106,7 @@ class proc_api:
 		'''
 	
 		self.fill_process()
+		self.add_proc_callbacks()
 
 if __name__ == '__main__':
 	proc_obj = proc_api()
