@@ -29,45 +29,41 @@ class ESController(object):
             id = name  #The full qualified name is being used as id for files
         elif type=='proc':
             id = id
-
         return self.es_client.delete(index=self.config['DEFAULT']['index'], doc_type=self.config['DEFAULT']['type'], id=id)
 
-
     def checkItem(self, name, type):
-        if type == 'md5':
-            target_field = 'md5'
-        else:
-            target_field = 'name'
-        body = {"query":{"bool": {"must": [{"term" : { "type" : type }}, {"term" : {target_field : name }}]}}}
-        res = self.es_client.search(index=self.config['DEFAULT']['index'], body = body, size=self.config['DEFAULT']['es_limit'], from_=0)
+        res = self.getter(name, type)
         return res['hits']['total']
 
     def fuzzyCheckItem(self, regex, type):
-        if type == 'md5':
-            target_field = 'md5'
-        else:
-            target_field = 'name'
-        body = {"query": {"bool": {"must": [{"term": {"type": type}},{"query_string": {"allow_leading_wildcard": True,"default_field":target_field,"query": regex}}]}}}
-        res = self.es_client.search(index=self.config['DEFAULT']['index'], body = body, size=self.config['DEFAULT']['es_limit'], from_=0)['hits']['total']
+        res = self.fuzzyGetter(regex, type)
         return res['hits']['total']
 
     def getItem(self, name, type):
+        res = self.getter(name, type)
+        return self.getHitsListFromESResult(res)
+
+    def fuzzyGetItem(self, regex, type):
+        res = self.fuzzyGetter(regex, type)
+        return self.getHitsListFromESResult(res)
+
+    def getter(self, name, type):
         if type == 'md5':
             target_field = 'md5'
         else:
             target_field = 'name'
         body = {"query": {"bool": {"must": [{"term": {"type": type}}, {"term": {target_field: name}}]}}}
         res = self.es_client.search(index=self.config['DEFAULT']['index'], body=body, size=self.config['DEFAULT']['es_limit'], from_=0)
-        return self.getHitsListFromESResult(res)
+        return res
 
-    def fuzzyGetItem(self, regex, type):
+    def fuzzyGetter(self, regex, type):
         if type == 'md5':
             target_field = 'md5'
         else:
             target_field = 'name'
         body = {"query": {"bool": {"must": [{"term": {"type": type}},{"query_string": {"allow_leading_wildcard": True,"default_field": target_field, "query": regex}}]}}}
         res = self.es_client.search(index=self.config['DEFAULT']['index'], body=body, size=self.config['DEFAULT']['es_limit'], from_=0)
-        return self.getHitsListFromESResult(res)
+        return res
 
     def getHitsListFromESResult(self, res):
         hits = []
