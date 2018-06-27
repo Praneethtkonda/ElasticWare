@@ -38,7 +38,7 @@ class ESController(object):
             target_field = 'md5'
         else:
             target_field = 'name'
-        body = {'query': {'term': {target_field: name}}}
+        body = {"query":{"bool": {"must": [{"term" : { "type" : type }}, {"term" : {target_field : name }}]}}}
         res = self.es_client.search(index=self.config['DEFAULT']['index'], body = body, size=self.config['DEFAULT']['es_limit'], from_=0)
         return res['hits']['total']
 
@@ -56,7 +56,7 @@ class ESController(object):
             target_field = 'md5'
         else:
             target_field = 'name'
-        body = {'query': {'term': {target_field: name}}}
+        body = {"query": {"bool": {"must": [{"term": {"type": type}}, {"term": {target_field: name}}]}}}
         res = self.es_client.search(index=self.config['DEFAULT']['index'], body=body, size=self.config['DEFAULT']['es_limit'], from_=0)
         return self.getHitsListFromESResult(res)
 
