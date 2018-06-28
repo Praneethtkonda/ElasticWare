@@ -1,5 +1,4 @@
-{
-    "search_items": {
+"search_items": {
         "dynamic_date_formats": [
             "yyyy-MM-dd",
             "dd-MM-yyyy",
@@ -16,17 +15,13 @@
                 "format": "yyyy-MM-dd HH:mm:ss"
             },
             "name": {
-                "type": "text",
-                "fielddata": true,
-                "analyser": "simple"
+                "type": "keyword"
             },
             "type":{
                 "type": "text"
             },
             "md5":{
-                 "type": "text",
-                "index": "not_analyzed"
-            }  
+                 "type": "keyword"
+            }
         }
     }
-}
