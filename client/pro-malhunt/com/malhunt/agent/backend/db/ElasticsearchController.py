@@ -50,6 +50,7 @@ class ESController(object):
     def getter(self, name, type):
         if type == 'md5':
             target_field = 'md5'
+            type = 'file'
         else:
             target_field = 'name'
         body = {"query": {"bool": {"must": [{"term": {"type": type}}, {"term": {target_field: name}}]}}}
@@ -59,6 +60,7 @@ class ESController(object):
     def fuzzyGetter(self, regex, type):
         if type == 'md5':
             target_field = 'md5'
+            type = 'file'
         else:
             target_field = 'name'
         body = {"query": {"bool": {"must": [{"term": {"type": type}},{"query_string": {"allow_leading_wildcard": True,"default_field": target_field, "query": regex}}]}}}
