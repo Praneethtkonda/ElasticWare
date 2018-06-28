@@ -1,14 +1,11 @@
 from threading import Thread
 import unittest
-import sys
-sys.path.insert('../')
-from process.proc_api import proc_api
+from com.malhunt.agent.backend.process.proc_api import proc_api
 import time
-from com.malhunt.agent.backend.db.ElasticsearchController import ESController
 import wmi
 
 
-class proc_api:
+class proc_api(unittest.TestCase):
 	'''
 	proc_api checks for running processes agent to access process related operations
 	'''

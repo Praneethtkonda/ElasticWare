@@ -100,10 +100,10 @@ class FileUpdater:
 
 if __name__ == '__main__':
 
-    #Filelist().filenames("C:\\")
-    config = configparser.ConfigParser()
-    config.readfp(open(os.path.dirname(__file__) + '/../config/mhprop.ini'))
-    paths = (config['DEFAULT']['file_watch_directories']).split(',')
-    file_updater = FileUpdater()
-    print "Initiating..."
-    file_updater.setObserver(paths)
+    Filelist().filenames("C:\\")
+    # config = configparser.ConfigParser()
+    # config.readfp(open(os.path.dirname(__file__) + '/../config/mhprop.ini'))
+    # paths = (config['DEFAULT']['file_watch_directories']).split(',')
+    # file_updater = FileUpdater()
+    # print "Initiating..."
+    # file_updater.setObserver(paths)
