@@ -23,7 +23,7 @@ class registry_api:
         registry_key: registry key to be stored
         """
 
-        print(self.es_handle.insertItem(name=registry_key, type='registry', id=registry_key))
+        print(self.es_handle.insertItem(name=registry_key, type='reg', id=registry_key))
 
     def rem_registry(self, registry_key):
         """
@@ -33,7 +33,7 @@ class registry_api:
         """
 
         try:
-            print self.es_handle.purgeItem(name=registry_key, type='registry', id=registry_key)
+            print self.es_handle.purgeItem(name=registry_key, type='reg', id=registry_key)
         except Exception:
             print "Couldn't remove process {}".format(registry_key)
 
@@ -44,7 +44,8 @@ class registry_api:
         """
 
         # TODO Change to elastic search
-        return self.es_handle.fuzzyCheckItem(regex=registry_key, type='registry')
+        print(registry_key)
+        return self.es_handle.fuzzyGetItem(regex=registry_key, type='registry')
 
     def list_all_keys(self, key, key_name):
         """
