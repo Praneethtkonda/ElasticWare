@@ -12,6 +12,7 @@ from com.malhunt.agent.backend.utils.md5calc import md5
 
 
 class FileEventsHandler(PatternMatchingEventHandler):
+    #TODO: See if this change shows up on CR's application
     es_handle = ESController()
 
     def __init__(self):
