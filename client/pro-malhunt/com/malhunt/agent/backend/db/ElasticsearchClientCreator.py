@@ -5,6 +5,7 @@ import os
 class ElasticsearchclientCreator(object):
     def __init__(self):
         print 'TESTING THIS CHANGE'
+        #Let's do this again :)
         self.config = configparser.ConfigParser()
         self.config.readfp(open(os.path.dirname(__file__) + '/../config/mhprop.ini'))
 
